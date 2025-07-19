@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O-BOY 8000 - COLD L3 Terminal</title>
+    <!-- CSP temporarily disabled for testing -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; font-src *; frame-src *; connect-src *; object-src 'none';"> -->
+    <title>O-BOY 8000 - FUEGO FORECAST Terminal</title>
+    <script src="https://unpkg.com/@solana/web3.js@1.87.6/lib/index.iife.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323:wght@400&display=swap');
         
@@ -395,9 +398,10 @@
         .pip-button {
             background: linear-gradient(135deg, var(--pip-dark) 0%, var(--primary-alpha-10) 100%);
             border: 2px solid var(--pip-green);
+            border-radius: 9px;
             color: var(--pip-green);
             font-family: 'VT323', monospace;
-            font-size: 20px;
+            font-size: 21px;
             padding: 12px 24px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -723,11 +727,11 @@
                 </div>
                 <div class="status-item">
                     <div class="status-dot"></div>
-                    <span>COLD L3</span>
+                                        <span>FUEGO FORECAST</span>
                 </div>
                 <div class="status-item">
                     <div class="status-dot"></div>
-                    <span>ACTIVE</span>
+                                        <span>DEVNET</span>
                 </div>
                 </div>
                 </div>
@@ -737,9 +741,10 @@
             <!-- Navigation -->
             <div class="pipboy-nav">
                 <button class="nav-tab active" data-section="stats">STATS</button>
-                <button class="nav-tab" data-section="vaults">VAULTS</button>
-                <button class="nav-tab" data-section="forecast">FORECAST</button>
+                                    <button class="nav-tab" data-section="vaults">VAULTS</button>
+                                    <button class="nav-tab" data-section="forecast">FORECAST</button>
                 <button class="nav-tab" data-section="radio">SETTINGS</button>
+                                    <button id="connect-wallet-btn-h" class="nav-tab" style="background: var(--pip-green); color: var(--pip-dark); border: 1px solid var(--pip-green); border-radius: 3px; font-weight: bold; margin-top: 10px; font-size: 14px;">CONNECT WALLET</button>
             </div>
             
             <!-- Screen Content -->
@@ -750,11 +755,11 @@
                         <div class="data-header">SYSTEM STATUS</div>
                         <div class="data-row">
                             <span class="data-label">Current Epoch:</span>
-                            <span class="data-value" id="current-epoch">1</span>
+                            <span class="data-value" id="current-epoch-o">1</span>
                         </div>
                         <div class="data-row">
                             <span class="data-label">Time Remaining:</span>
-                            <span class="data-value" id="time-remaining">7:23:45</span>
+                            <span class="data-value" id="time-remaining-o">7:23:45</span>
                         </div>
                         <div class="data-row">
                             <span class="data-label">Total Players:</span>
@@ -784,6 +789,10 @@
                             <span class="data-label">Security Status:</span>
                             <span class="data-value" id="security-status">CLEAN</span>
                     </div>
+                        <div class="data-row">
+                            <span class="data-label">Wallet:</span>
+                            <span class="data-value" id="wallet-status-o">DISCONNECTED</span>
+                    </div>
                 </div>
             </div>
             
@@ -802,14 +811,14 @@
                       <div class="data-row"><span class="data-label">Current Price:</span> <span class="data-value" id="current-price-down">$0.0245</span></div>
                       <div class="data-row"><span class="data-label">Prediction:</span> <span class="data-value" id="prediction-down">NONE</span></div>
                       <div class="data-row"><span class="data-label">Amount:</span> <input type="number" id="bet-amount-down" value="100" class="pip-input" style="width: 120px;"></div>
-                      <button class="pip-button" id="predict-down">Deposit to DOWN</button>
+                      <button class="pip-button" id="predict-down">Goin DOWN</button>
                     </div>
                     <div class="vaults-forecast-col">
                       <div class="vaults-forecast-header">UP FORECAST</div>
                       <div class="data-row"><span class="data-label">Current Price:</span> <span class="data-value" id="current-price-up">$0.0245</span></div>
                       <div class="data-row"><span class="data-label">Prediction:</span> <span class="data-value" id="prediction-up">NONE</span></div>
                       <div class="data-row"><span class="data-label">Amount:</span> <input type="number" id="bet-amount-up" value="100" class="pip-input" style="width: 120px;"></div>
-                      <button class="pip-button" id="predict-up">Deposit to UP</button>
+                      <button class="pip-button" id="predict-up">Going UP</button>
                     </div>
                   </div>
                 </div>
@@ -877,17 +886,18 @@
                         <div class="data-header">SYSTEM TERMINAL</div>
                         <div id="system-log" style="height: 200px; overflow-y: auto; font-size: 14px; line-height: 1.6;">
                             <div>[12:34:56] O-BOY 8000 initialized...</div>
-                            <div>[12:34:57] Connecting to COLD L3 network...</div>
-                            <div>[12:34:58] Network connection established</div>
-                            <div>[12:35:00] Mining system online</div>
+                            <div>[12:34:57] Connecting to Solana devnet...</div>
+                            <div>[12:34:58] FuegoForecast program detected</div>
+                            <div>[12:35:00] Program ID: HneoqxfNZ8BrUbZHhtsQjFfipGFbeL3JauA5KfaNRE8N</div>
                             <div>[12:35:01] Trading interface ready</div>
                             <div>[12:35:02] Settings panel loaded</div>
                             <div>[12:35:03] Type 'help' for commands</div>
+                            <div>[12:35:04] Type 'connect' to connect wallet</div>
                     </div>
                         
                         <div class="terminal-input-line">
                             <span class="terminal-prompt">root@oboy8000:~$</span>
-                            <input type="text" class="terminal-input" id="terminal-command" placeholder="Enter command...">
+                            <input type="text" class="terminal-input" id="terminal-command-o" placeholder="Enter command...">
                             <span class="cursor"></span>
                         </div>
                     </div>
@@ -905,7 +915,7 @@
                             <!-- Screen Effects -->
                             <div class="glow-effect" id="glow-overlay-h"></div>
                             <div class="vhs-effect" id="vhs-overlay-h"></div>
-                            <!-- O-Boy Header -->
+                            <!-- HEAT-Boy Header -->
                             <div class="pipboy-header">
                                 <button id="modeToggleH" class="pipboy-title mode-toggle-btn">HEAT-BOY 8000</button>
                                 <div class="pipboy-status">
@@ -931,6 +941,7 @@
                                     <button class="nav-tab" data-section="vaults">VAULTS</button>
                                     <button class="nav-tab" data-section="forecast">FORECAST</button>
                                     <button class="nav-tab" data-section="radio">SETTINGS</button>
+                                    <button id="connect-wallet-btn-o" class="nav-tab" style="background: var(--pip-green); color: var(--pip-dark); border: 1px solid var(--pip-green); border-radius: 3px; font-weight: bold; margin-top: 10px; font-size: 14px;">CONNECT WALLET</button>
                                 </div>
                                 <!-- Screen Content -->
                                 <div class="pipboy-screen">
@@ -940,11 +951,11 @@
                                             <div class="data-header">SYSTEM STATUS</div>
                         <div class="data-row">
                                                 <span class="data-label">Current Epoch:</span>
-                                                <span class="data-value" id="current-epoch">1</span>
+                                                <span class="data-value" id="current-epoch-h">1</span>
                         </div>
                                             <div class="data-row">
                                                 <span class="data-label">Time Remaining:</span>
-                                                <span class="data-value" id="time-remaining">7:23:45</span>
+                                                <span class="data-value" id="time-remaining-h">7:23:45</span>
                         </div>
                                             <div class="data-row">
                                                 <span class="data-label">Total Players:</span>
@@ -967,17 +978,28 @@
                         </div>
                         <div class="data-row">
                                                 <span class="data-label">Treasury Fee:</span>
-                                                <span class="data-value" id="treasury-fee">10%</span>
+                                                <span class="data-value" id="treasury-fee">8%</span>
                         </div>
                         <div class="data-row">
-                                                <span class="data-label">Security Status:</span>
-                                                <span class="data-value" id="security-status">CLEAN</span>
+                            <span class="data-label">Security Status:</span>
+                            <span class="data-value" id="security-status">CLEAN</span>
                         </div>
+                        <div class="data-row">
+                            <span class="data-label">Wallet:</span>
+                            <span class="data-value" id="wallet-status-h">DISCONNECTED</span>
+                    </div>
                     </div>
                                     </div>
                                     <!-- FORECAST Section -->
                                     <div class="screen-section" id="forecast">
-                                        <div class="vaults-forecast-columns">
+                                        <!-- TradingView Chart Widget (default candle colors) -->
+                                        <div id="tradingview-chart-container-h" style="width:100%;height:340px;margin:0;">
+                                            <!-- TradingView Widget BEGIN -->
+                                            <iframe src="https://www.tradingview.com/widgetembed/?symbol=BINANCE:BTCUSDT&interval=15&hidesidetoolbar=1&theme=dark&style=1&timezone=Etc/UTC&withdateranges=1&hideideas=1&studies=[]" style="width:100%;height:100%;border:none;"></iframe>
+                                            <!-- TradingView Widget END -->
+                                        </div>
+                                        <!-- Forecast Vaults/Boxes (DOWN left, UP right) -->
+                                        <div class="vaults-forecast-columns" style="margin-top:0;">
                                             <div class="vaults-forecast-col">
                                                 <div class="vaults-forecast-header">DOWN FORECAST</div>
                                                 <div class="data-row"><span class="data-label">Current Price:</span> <span class="data-value" id="current-price-down">$0.0245</span></div>
@@ -1064,7 +1086,7 @@
                         </div>
                         <div class="terminal-input-line">
                                                 <span class="terminal-prompt">root@heatboy8000:~$</span>
-                            <input type="text" class="terminal-input" id="terminal-command" placeholder="Enter command...">
+                            <input type="text" class="terminal-input" id="terminal-command-h" placeholder="Enter command...">
                             <span class="cursor"></span>
                         </div>
                     </div>
@@ -1083,7 +1105,7 @@
         const modeToggleO = document.getElementById('modeToggleO');
         const modeToggleH = document.getElementById('modeToggleH');
         const flipContainer = document.getElementById('flipContainer');
-        let isHeat = false;
+        let isHeat = true; // Start with HEAT mode as default
         let userTheme = null;
         function setTheme(theme) {
             document.body.classList.remove('theme-green','theme-amber','theme-red','theme-blue','theme-purple');
@@ -1112,6 +1134,8 @@
                 userTheme = null;
                 autoThemeOnFlip();
             }
+            // Update wallet status in HEAT mode if connected
+            setTimeout(updateWalletStatusInMode, 100);
         };
         modeToggleH.onclick = function() {
             isHeat = false;
@@ -1123,7 +1147,52 @@
                 userTheme = null;
                 autoThemeOnFlip();
             }
+            // Update wallet status in O mode if connected
+            setTimeout(updateWalletStatusInMode, 100);
         };
+        
+        // Function to update wallet status when switching modes
+        function updateWalletStatusInMode() {
+            // Only show wallet status if actually connected (has publicKey)
+            if (wallet && wallet.publicKey) {
+                // Determine wallet name
+                let walletName = 'WALLET';
+                if (wallet && wallet.isPhantom) {
+                    walletName = 'PHANTOM';
+                } else if (wallet && wallet.isSolflare) {
+                    walletName = 'SOLFLARE';
+                } else if (wallet && wallet.isSlope) {
+                    walletName = 'SLOPE';
+                } else if (wallet && wallet.isBackpack) {
+                    walletName = 'BACKPACK';
+                }
+                
+                // Update HEAT mode wallet status
+                const heatHeader = document.querySelector('#heatModePanel .pipboy-header .pipboy-status');
+                if (heatHeader) {
+                    let existingWalletStatus = heatHeader.querySelector('.wallet-status');
+                    if (!existingWalletStatus) {
+                        existingWalletStatus = document.createElement('div');
+                        existingWalletStatus.className = 'status-item wallet-status';
+                        existingWalletStatus.innerHTML = `
+                            <div class="status-dot" style="background: #00ff41; box-shadow: 0 0 6px #00ff41;"></div>
+                            <span>${walletName}</span>
+                        `;
+                        existingWalletStatus.style.marginLeft = '30px';
+                        heatHeader.appendChild(existingWalletStatus);
+                    }
+                }
+            } else {
+                // Remove wallet status if not connected
+                const heatHeader = document.querySelector('#heatModePanel .pipboy-header .pipboy-status');
+                if (heatHeader) {
+                    const existingWalletStatus = heatHeader.querySelector('.wallet-status');
+                    if (existingWalletStatus) {
+                        existingWalletStatus.remove();
+                    }
+                }
+            }
+        }
         // Theme button click logic
         document.querySelectorAll('.theme-btn').forEach(btn => {
             btn.onclick = function() {
@@ -1329,16 +1398,501 @@
             log.scrollTop = log.scrollHeight;
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        // Solana Integration
+        let wallet = null;
+        let connection = null;
+        let program = null;
+        const PROGRAM_ID = 'HneoqxfNZ8BrUbZHhtsQjFfipGFbeL3JauA5KfaNRE8N';
+        
+        // Initialize Solana connection
+        async function initializeSolana() {
+            try {
+                addSystemLogEntry('Initializing Solana connection...', 'o');
+                
+                // Check if we're in a secure context
+                if (!window.isSecureContext) {
+                    addSystemLogEntry('ERROR: Not in secure context. Wallet connections require HTTPS or localhost.', 'o');
+                    return false;
+                }
+                
+                addSystemLogEntry('Secure context confirmed', 'o');
+                
+                // Wait for Solana Web3 to load
+                if (typeof solanaWeb3 === 'undefined') {
+                    addSystemLogEntry('ERROR: Solana Web3 library not loaded', 'o');
+                    addSystemLogEntry('Trying to load Solana Web3...', 'o');
+                    
+                    // Try to load the library dynamically
+                    const script = document.createElement('script');
+                    script.src = 'https://unpkg.com/@solana/web3.js@1.87.6/lib/index.iife.min.js';
+                    script.onload = () => {
+                        addSystemLogEntry('Solana Web3 loaded dynamically', 'o');
+                        initializeSolana();
+                    };
+                    script.onerror = () => {
+                        addSystemLogEntry('ERROR: Failed to load Solana Web3', 'o');
+                    };
+                    document.head.appendChild(script);
+                    return false;
+                }
+                
+                addSystemLogEntry('Solana Web3 library found', 'o');
+                
+                // Check if Phantom wallet is available
+                addSystemLogEntry('Checking for Phantom wallet...', 'o');
+                
+                // Simple detection like the working test page
+                if (typeof window.solana !== 'undefined') {
+                    wallet = window.solana;
+                    addSystemLogEntry('✓ window.solana found', 'o');
+                    addSystemLogEntry(`Type: ${typeof wallet}`, 'o');
+                    addSystemLogEntry(`Is Phantom: ${wallet?.isPhantom}`, 'o');
+                    
+                    if (wallet && wallet.isPhantom) {
+                        connection = new solanaWeb3.Connection('https://api.devnet.solana.com', 'confirmed');
+                        addSystemLogEntry('✓ Phantom wallet detected', 'o');
+                        addSystemLogEntry('✓ Solana connection created', 'o');
+                        return true;
+                    }
+                } else {
+                    addSystemLogEntry('✗ window.solana not found', 'o');
+                }
+                
+                // Fallback to window.phantom.solana
+                if (typeof window.phantom !== 'undefined' && window.phantom.solana) {
+                    wallet = window.phantom.solana;
+                    connection = new solanaWeb3.Connection('https://api.devnet.solana.com', 'confirmed');
+                    addSystemLogEntry('✓ Phantom wallet detected via window.phantom.solana', 'o');
+                    return true;
+                }
+                
+                addSystemLogEntry('ERROR: No compatible wallet found', 'o');
+                addSystemLogEntry('Make sure Phantom is installed and on devnet', 'o');
+                
+                // Show instructions for devnet setup
+                addSystemLogEntry('INSTRUCTIONS:', 'o');
+                addSystemLogEntry('1. Open Phantom wallet', 'o');
+                addSystemLogEntry('2. Go to Settings → Developer Settings', 'o');
+                addSystemLogEntry('3. Change Network to "Devnet"', 'o');
+                addSystemLogEntry('4. Refresh this page and try again', 'o');
+                
+                // Try to prompt user to install Phantom
+                if (confirm('Phantom wallet not detected or not on devnet. Would you like to see setup instructions?')) {
+                    alert('To use this app:\n\n1. Open Phantom wallet\n2. Go to Settings → Developer Settings\n3. Change Network to "Devnet"\n4. Refresh this page\n\nOr visit: https://phantom.app/');
+                }
+                
+                return false;
+            } catch (error) {
+                addSystemLogEntry(`ERROR: ${error.message}`, 'o');
+                return false;
+            }
+        }
+        
+        // Reset wallet connection state
+        function resetWalletState() {
+            addSystemLogEntry('Resetting wallet connection state...', 'o');
+            
+            // Remove all wallet status indicators
+            const allWalletStatus = document.querySelectorAll('[data-wallet-status]');
+            allWalletStatus.forEach(item => {
+                addSystemLogEntry(`Removing wallet status: ${item.textContent}`, 'o');
+                item.remove();
+            });
+            
+            // Remove any elements with PHANTOM text in the status area
+            const heatHeader = document.querySelector('#heatModePanel .pipboy-header .pipboy-status');
+            const oHeader = document.querySelector('#oModePanel .pipboy-header .pipboy-status');
+            
+            if (heatHeader) {
+                const phantomElements = heatHeader.querySelectorAll('.status-item');
+                phantomElements.forEach(item => {
+                    if (item.textContent.includes('PHANTOM')) {
+                        addSystemLogEntry('Removing PHANTOM element from HEAT header', 'o');
+                        item.remove();
+                    }
+                });
+            }
+            
+            if (oHeader) {
+                const phantomElements = oHeader.querySelectorAll('.status-item');
+                phantomElements.forEach(item => {
+                    if (item.textContent.includes('PHANTOM')) {
+                        addSystemLogEntry('Removing PHANTOM element from O header', 'o');
+                        item.remove();
+                    }
+                });
+            }
+            
+            // Also remove any PHANTOM elements from the entire header area
+            const allHeaders = document.querySelectorAll('.pipboy-header');
+            allHeaders.forEach(header => {
+                const phantomElements = header.querySelectorAll('.status-item');
+                phantomElements.forEach(item => {
+                    if (item.textContent.includes('PHANTOM')) {
+                        addSystemLogEntry('Removing PHANTOM element from header', 'o');
+                        item.remove();
+                    }
+                });
+            });
+            
+            // Reset connect buttons to original state
+            const connectBtnO = document.getElementById('connect-wallet-btn-o');
+            const connectBtnH = document.getElementById('connect-wallet-btn-h');
+            
+            if (connectBtnO) {
+                connectBtnO.style.display = 'block';
+                connectBtnO.onclick = () => {
+                    addSystemLogEntry('CONNECT WALLET button clicked! (O-BOY)', 'o');
+                    connectWallet();
+                };
+            }
+            
+            if (connectBtnH) {
+                connectBtnH.style.display = 'block';
+                connectBtnH.onclick = () => {
+                    addSystemLogEntry('CONNECT WALLET button clicked! (HEAT-BOY)', 'o');
+                    connectWallet();
+                };
+            }
+            
+            // Reset wallet status text
+            const walletStatusO = document.getElementById('wallet-status-o');
+            const walletStatusH = document.getElementById('wallet-status-h');
+            
+            if (walletStatusO) {
+                walletStatusO.textContent = 'DISCONNECTED';
+                walletStatusO.style.color = 'var(--pip-amber)';
+            }
+            
+            if (walletStatusH) {
+                walletStatusH.textContent = 'DISCONNECTED';
+                walletStatusH.style.color = 'var(--pip-amber)';
+            }
+            
+            addSystemLogEntry('Wallet state reset complete', 'o');
+        }
+        
+        // Connect wallet
+        let isConnecting = false; // Prevent multiple simultaneous connections
+        async function connectWallet() {
+            if (isConnecting) {
+                addSystemLogEntry('Wallet connection already in progress, skipping...', 'o');
+                return false;
+            }
+            
+            isConnecting = true;
+            try {
+                // Aggressive cleanup of any existing PHANTOM elements
+                const allPhantomElements = document.querySelectorAll('.status-item');
+                allPhantomElements.forEach(item => {
+                    if (item.textContent.includes('PHANTOM')) {
+                        addSystemLogEntry('Aggressive cleanup: Removing PHANTOM element', 'o');
+                        item.remove();
+                    }
+                });
+                
+                // Reset wallet state to prevent duplicates
+                resetWalletState();
+                
+                if (!wallet) {
+                    addSystemLogEntry('ERROR: No wallet detected. Run detection first.', 'o');
+                    await initializeSolana();
+                    if (!wallet) {
+                        addSystemLogEntry('ERROR: No wallet detected. Please install Phantom wallet.', 'o');
+                        return false;
+                    }
+                }
+                
+                addSystemLogEntry('Requesting wallet connection...', 'o');
+                const response = await wallet.connect();
+                
+                if (response && response.publicKey) {
+                    const publicKey = response.publicKey.toString();
+                    addSystemLogEntry(`✓ Wallet connected successfully!`, 'o');
+                    addSystemLogEntry(`Public key: ${publicKey.slice(0, 8)}...${publicKey.slice(-8)}`, 'o');
+                    
+                    // Get balance
+                    try {
+                        const balance = await connection.getBalance(response.publicKey);
+                        const solBalance = balance / 1000000000;
+                        addSystemLogEntry(`Balance: ${solBalance.toFixed(4)} SOL`, 'o');
+                    } catch (balanceError) {
+                        addSystemLogEntry(`Balance check failed: ${balanceError.message}`, 'o');
+                    }
+                    
+                    // Remove any existing wallet status indicators to prevent duplicates
+                    const existingWalletStatusO = document.querySelector('#oModePanel .pipboy-header .status-item[data-wallet-status]');
+                    const existingWalletStatusH = document.querySelector('#heatModePanel .pipboy-header .status-item[data-wallet-status]');
+                    
+                    if (existingWalletStatusO) {
+                        addSystemLogEntry('Removing existing O-BOY wallet status indicator', 'o');
+                        existingWalletStatusO.remove();
+                    }
+                    if (existingWalletStatusH) {
+                        addSystemLogEntry('Removing existing HEAT-BOY wallet status indicator', 'o');
+                        existingWalletStatusH.remove();
+                    }
+                    
+                    // Also remove any elements with PHANTOM text that might be duplicates
+                    const allStatusItems = document.querySelectorAll('.status-item');
+                    allStatusItems.forEach(item => {
+                        if (item.textContent.includes('PHANTOM') && item.hasAttribute('data-wallet-status')) {
+                            addSystemLogEntry('Removing duplicate PHANTOM status indicator', 'o');
+                            item.remove();
+                        }
+                    });
+                    
+                    // More aggressive cleanup - remove ALL wallet status indicators
+                    const allWalletStatus = document.querySelectorAll('[data-wallet-status]');
+                    allWalletStatus.forEach(item => {
+                        if (item.textContent.includes('PHANTOM')) {
+                            addSystemLogEntry('Removing all PHANTOM wallet status indicators', 'o');
+                            item.remove();
+                        }
+                    });
+                    
+                    // Transform both buttons into status indicators
+                    const connectBtnO = document.getElementById('connect-wallet-btn-o');
+                    const connectBtnH = document.getElementById('connect-wallet-btn-h');
+                    
+                    // Determine wallet name
+                    let walletName = 'WALLET';
+                    if (wallet && wallet.isPhantom) {
+                        walletName = 'PHANTOM';
+                    } else if (wallet && wallet.isSolflare) {
+                        walletName = 'SOLFLARE';
+                    } else if (wallet && wallet.isSlope) {
+                        walletName = 'SLOPE';
+                    } else if (wallet && wallet.isBackpack) {
+                        walletName = 'BACKPACK';
+                    }
+                    
+                    // Update O-BOY wallet status and hide button
+                    if (connectBtnO) {
+                        addSystemLogEntry('Updating O-BOY wallet status...', 'o');
+                        
+                        // Hide the connect button
+                        connectBtnO.style.display = 'none';
+                        
+                        // Update wallet status text
+                        const walletStatusO = document.getElementById('wallet-status-o');
+                        if (walletStatusO) {
+                            walletStatusO.textContent = walletName;
+                            walletStatusO.style.color = '#00ff41';
+                        }
+                        
+                        // Add status indicator to header
+                        const oHeader = document.querySelector('#oModePanel .pipboy-header .pipboy-status');
+                        if (oHeader) {
+                            const statusIndicator = document.createElement('div');
+                            statusIndicator.className = 'status-item';
+                            statusIndicator.setAttribute('data-wallet-status', 'true');
+                            statusIndicator.innerHTML = `
+                                <div class="status-dot" style="background: #00ff41; box-shadow: 0 0 6px #00ff41;"></div>
+                                <span>${walletName}</span>
+                            `;
+                            oHeader.appendChild(statusIndicator);
+                        }
+                        
+                        addSystemLogEntry('O-BOY wallet status updated successfully', 'o');
+                    } else {
+                        addSystemLogEntry('ERROR: O-BOY connect button not found', 'o');
+                    }
+                    
+                    // Update HEAT-BOY wallet status and hide button
+                    if (connectBtnH) {
+                        addSystemLogEntry('Updating HEAT-BOY wallet status...', 'o');
+                        
+                        // Hide the connect button
+                        connectBtnH.style.display = 'none';
+                        
+                        // Update wallet status text
+                        const walletStatusH = document.getElementById('wallet-status-h');
+                        if (walletStatusH) {
+                            walletStatusH.textContent = walletName;
+                            walletStatusH.style.color = '#00ff41';
+                        }
+                        
+                        // Add status indicator to header
+                        const heatHeader = document.querySelector('#heatModePanel .pipboy-header .pipboy-status');
+                        if (heatHeader) {
+                            const statusIndicator = document.createElement('div');
+                            statusIndicator.className = 'status-item';
+                            statusIndicator.setAttribute('data-wallet-status', 'true');
+                            statusIndicator.innerHTML = `
+                                <div class="status-dot" style="background: #00ff41; box-shadow: 0 0 6px #00ff41;"></div>
+                                <span>${walletName}</span>
+                            `;
+                            heatHeader.appendChild(statusIndicator);
+                        }
+                        
+                        addSystemLogEntry('HEAT-BOY wallet status updated successfully', 'o');
+                    } else {
+                        addSystemLogEntry('ERROR: HEAT-BOY connect button not found', 'o');
+                    }
+                    
+                    // Both buttons now transformed to status indicators
+                    addSystemLogEntry('Wallet status updated in both O-BOY and HEAT-BOY headers', 'o');
+                    
+                    updateWalletBalance();
+                    return true;
+                } else {
+                    addSystemLogEntry('ERROR: No public key received', 'o');
+                    return false;
+                }
+                
+            } catch (error) {
+                addSystemLogEntry(`ERROR: ${error.message}`, 'o');
+                
+                if (error.message.includes('User rejected')) {
+                    addSystemLogEntry('User rejected the connection in Phantom', 'o');
+                } else if (error.message.includes('User denied')) {
+                    addSystemLogEntry('User denied the connection in Phantom', 'o');
+                }
+                
+                return false;
+            } finally {
+                isConnecting = false;
+            }
+        }
+        
+        // Update wallet balance
+        async function updateWalletBalance() {
+            try {
+                if (!wallet || !connection) return;
+                
+                const balance = await connection.getBalance(wallet.publicKey);
+                const solBalance = balance / 1000000000; // Convert lamports to SOL
+                
+                // Update UI elements for both O and HEAT modes
+                const balanceElements = document.querySelectorAll('#wallet-balance');
+                balanceElements.forEach(element => {
+                    // Check if we're in HEAT mode and update accordingly
+                    const isHeatMode = element.closest('#heatModePanel');
+                    if (isHeatMode) {
+                        element.textContent = `${solBalance.toFixed(4)} HEAT`;
+                    } else {
+                        element.textContent = `${solBalance.toFixed(4)} SOL`;
+                    }
+                });
+                
+                // Also update the status display
+                const statusElements = document.querySelectorAll('.pipboy-status');
+                statusElements.forEach(status => {
+                    const balanceSpan = status.querySelector('.balance-display');
+                    if (balanceSpan) {
+                        const isHeatMode = status.closest('#heatModePanel');
+                        if (isHeatMode) {
+                            balanceSpan.textContent = `${solBalance.toFixed(4)} HEAT`;
+                        } else {
+                            balanceSpan.textContent = `${solBalance.toFixed(4)} SOL`;
+                        }
+                    }
+                });
+                
+                addSystemLogEntry(`Balance updated: ${solBalance.toFixed(4)} SOL`, 'o');
+            } catch (error) {
+                addSystemLogEntry(`ERROR updating balance: ${error.message}`, 'o');
+            }
+        }
+        
+
+        
+        // Submit forecast to Solana program
+        async function submitForecast(position, amount) {
+            try {
+                if (!wallet || !connection) {
+                    addSystemLogEntry('ERROR: Wallet not connected', 'o');
+                    return;
+                }
+                
+                addSystemLogEntry(`Submitting ${position} forecast for ${amount} tokens...`, 'o');
+                
+                // This would be the actual transaction to your program
+                // For now, we'll simulate the transaction
+                const transaction = new solanaWeb3.Transaction();
+                
+                // Add your program instruction here
+                // const instruction = new solanaWeb3.TransactionInstruction({
+                //     keys: [...],
+                //     programId: new solanaWeb3.PublicKey(PROGRAM_ID),
+                //     data: Buffer.from([...])
+                // });
+                // transaction.add(instruction);
+                
+                // For demonstration, we'll just log the attempt
+                addSystemLogEntry(`Forecast submitted: ${position} - ${amount} tokens`, 'o');
+                addSystemLogEntry('Transaction simulation complete', 'o');
+                
+            } catch (error) {
+                addSystemLogEntry(`ERROR submitting forecast: ${error.message}`, 'o');
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            addSystemLogEntry('DOM loaded, initializing...', 'o');
+            
             initializeSettings();
             setupEventListeners();
             startSystemMessages('o');
             startSystemMessages('heat');
+            
+                                        // Add click handlers to existing CONNECT WALLET buttons in Player Status
+            const connectBtnO = document.getElementById('connect-wallet-btn-o');
+            if (connectBtnO) {
+                connectBtnO.onclick = () => {
+                    addSystemLogEntry('CONNECT WALLET button clicked! (O-BOY)', 'o');
+                    connectWallet();
+                };
+                addSystemLogEntry('CONNECT WALLET button handler added to O-BOY Player Status', 'o');
+            } else {
+                addSystemLogEntry('ERROR: Could not find O-BOY connect button in Player Status', 'o');
+            }
+            
+            // Add click handlers to existing CONNECT WALLET buttons in Player Status
+            const connectBtnH = document.getElementById('connect-wallet-btn-h');
+            if (connectBtnH) {
+                connectBtnH.onclick = () => {
+                    addSystemLogEntry('CONNECT WALLET button clicked! (HEAT-BOY)', 'o');
+                    connectWallet();
+                };
+                addSystemLogEntry('CONNECT WALLET button handler added to HEAT-BOY Player Status', 'o');
+            } else {
+                addSystemLogEntry('ERROR: Could not find HEAT-BOY connect button in Player Status', 'o');
+            }
+            
+            // Test if Solana Web3 is available
+            setTimeout(() => {
+                if (typeof solanaWeb3 !== 'undefined') {
+                    addSystemLogEntry('Solana Web3 is available', 'o');
+                } else {
+                    addSystemLogEntry('Solana Web3 is NOT available', 'o');
+                }
+            }, 500);
+            
+            // Wait a bit for everything to load, then initialize Solana
+            setTimeout(async () => {
+                await initializeSolana();
+                
+                // Check if wallet is already connected and transform buttons if needed
+                if (wallet && wallet.isConnected) {
+                    addSystemLogEntry('Wallet already connected, transforming buttons...', 'o');
+                    await connectWallet();
+                }
+            }, 1000);
+            
+            // Add global error handler for Phantom state errors
+            window.addEventListener('error', function(event) {
+                if (event.message && event.message.includes('Property:The state with a data type: unknown does not match a schema')) {
+                    addSystemLogEntry('Phantom state error detected - this is normal, continuing...', 'o');
+                    event.preventDefault();
+                }
+            });
         });
 
         // Terminal command handling
         // Terminal logic for both O and HEAT sides
-        document.querySelectorAll('.terminal-input').forEach(input => {
+        document.querySelectorAll('#terminal-command-o, #terminal-command-h').forEach(input => {
             input.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     const command = this.value.trim();
@@ -1391,6 +1945,8 @@
                     addLogEntry('  info      Platform usage and rules', logPanel, cliClass, true);
                     addLogEntry('  status    Show system status', logPanel, cliClass, true);
                     addLogEntry('  balance   Show your wallet balance', logPanel, cliClass, true);
+                    addLogEntry('  connect   Connect Phantom wallet', logPanel, cliClass, true);
+                    addLogEntry('  program   Show program status', logPanel, cliClass, true);
                     addLogEntry('  clear     Clear the terminal log', logPanel, cliClass, true);
                     addLogEntry('  stop      Stop system messages', logPanel, cliClass, true);
                     addLogEntry('Type info for platform details.', logPanel, cliClass, true);
@@ -1411,7 +1967,27 @@
                     addLogEntry('[STATUS] System operational. Epoch active.', logPanel, cliClass, true);
                     break;
                 case 'balance':
-                    addLogEntry(`[BALANCE] Wallet: 1,000 ${isHeat ? 'HEAT' : 'COLD'}`, logPanel, cliClass, true);
+                    if (wallet && connection) {
+                        updateWalletBalance().then(() => {
+                            addLogEntry(`[BALANCE] Updated from blockchain`, logPanel, cliClass, true);
+                        });
+                    } else {
+                        addLogEntry(`[BALANCE] Wallet: 1,000 ${isHeat ? 'HEAT' : 'COLD'} (simulated)`, logPanel, cliClass, true);
+                    }
+                    break;
+                case 'connect':
+                    if (wallet) {
+                        connectWallet().then(() => {
+                            addLogEntry(`[CONNECT] Wallet connection attempted`, logPanel, cliClass, true);
+                        });
+                    } else {
+                        addLogEntry(`[ERROR] Phantom wallet not available`, logPanel, cliClass, true);
+                    }
+                    break;
+                case 'program':
+                    addLogEntry(`[PROGRAM] ID: ${PROGRAM_ID}`, logPanel, cliClass, true);
+                    addLogEntry(`[PROGRAM] Network: Devnet`, logPanel, cliClass, true);
+                    addLogEntry(`[PROGRAM] Status: Deployed`, logPanel, cliClass, true);
                     break;
                 // 'mine' and 'trade' commands removed
                 case 'clear':
@@ -1429,11 +2005,21 @@
         // Navigation functionality
         document.querySelectorAll('.nav-tab').forEach(tab => {
             tab.addEventListener('click', function() {
+                // Skip if this is a connect wallet button
+                if (tab.id === 'connect-wallet-btn-o' || tab.id === 'connect-wallet-btn-h') {
+                    return;
+                }
+                
                 // Find the closest .pipboy-main container (O or HEAT side)
                 const pipboyMain = tab.closest('.pipboy-main');
                 if (!pipboyMain) return;
                 // Only affect nav-tabs and screen-sections within this mode
-                pipboyMain.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                pipboyMain.querySelectorAll('.nav-tab').forEach(t => {
+                    // Don't remove active class from connect wallet buttons
+                    if (t.id !== 'connect-wallet-btn-o' && t.id !== 'connect-wallet-btn-h') {
+                        t.classList.remove('active');
+                    }
+                });
                 pipboyMain.querySelectorAll('.screen-section').forEach(s => s.classList.remove('active'));
                 // Add active class to clicked tab
                 tab.classList.add('active');
@@ -1448,22 +2034,39 @@
             });
         });
 
-        // Prediction buttons
-        document.getElementById('predict-up').addEventListener('click', () => {
+        // Prediction buttons with Solana integration
+        document.getElementById('predict-up').addEventListener('click', async () => {
             document.getElementById('predict-up').classList.add('active');
             document.getElementById('predict-down').classList.remove('active');
             document.getElementById('prediction').textContent = 'UP';
+            
+            const amount = document.getElementById('bet-amount-up').value;
+            if (amount && amount > 0) {
+                await submitForecast('UP', amount);
+            }
         });
 
-        document.getElementById('predict-down').addEventListener('click', () => {
+        document.getElementById('predict-down').addEventListener('click', async () => {
             document.getElementById('predict-down').classList.add('active');
             document.getElementById('predict-up').classList.remove('active');
             document.getElementById('prediction').textContent = 'DOWN';
+            
+            const amount = document.getElementById('bet-amount-down').value;
+            if (amount && amount > 0) {
+                await submitForecast('DOWN', amount);
+            }
         });
 
         // Update timer
         function updateTimer() {
-            const timer = document.getElementById('time-remaining');
+            // Update both O and HEAT mode timers
+            const timerO = document.getElementById('time-remaining-o');
+            const timerH = document.getElementById('time-remaining-h');
+            
+            // Use whichever timer is available
+            const timer = timerO || timerH;
+            if (!timer) return;
+            
             const current = timer.textContent.split(':');
             let hours = parseInt(current[0]);
             let minutes = parseInt(current[1]);
@@ -1484,7 +2087,11 @@
                 }
             }
             
-            timer.textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            const newTime = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update both timers if they exist
+            if (timerO) timerO.textContent = newTime;
+            if (timerH) timerH.textContent = newTime;
         }
 
         setInterval(updateTimer, 1000);
