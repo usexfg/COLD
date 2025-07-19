@@ -23,7 +23,7 @@
     - 70% is distributed to the winners, proportional to their vault share.
   - **No burn:** No tokens are burned in the HEAT contract.
 - **Claiming:**
-  - Losing users can claim 20% of their original stake.
+  - Users of incorrect vault still receive 20% of their original forecasting stake instead of 0.
   - Winning users claim their original stake plus their share of the 70% pool.
 
 ## Accounts
@@ -38,7 +38,7 @@
 - All stats, balances, and token references are mirrored for O and HEAT.
 
 ## Key Decisions & Notes
-- No bonding or minting in HEAT contract; all logic is pure SPL token transfer and vault accounting.
+- No bonding or minting in Solana HEAT contract; all logic is pure SPL token transfer and vault accounting.
 - All protocol and treasury fee logic is explicit and on-chain, with clear separation for audits.
 - The architecture is designed for maximum clarity, auditability, and user experience.
 
