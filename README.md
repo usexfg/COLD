@@ -40,9 +40,20 @@ Asset #01
 
 **Wrapped XFG (wXFG) Interest Rate**: Similar to liquidity pool rates. (wXFG/COLD, EVM_Native_Coin/COLD)
 
-**XFG Interest Rate** : as COLD and XFG are the nearly the same supply by atomic unit (decimal place differs) **interest is factored using a supply ratio** of 1:100000 ( 1 COLD : 100,000 $XFG  or  1 $XFG : 0.00001 COLD )
+**XFG Interest Rate** : as COLD and XFG are the nearly identical in supply by atomic unit (only decimal place differs) **interest is factored using a supply ratio** of 1:100000 ( 1 COLD : 100,000 $XFG  or  1 $XFG : 0.00001 COLD )
 
-                       For our initial onboarding wave, each time wXFG doubles or halves in price,
+ie
+
+   80.000000000000 COLD
+
+   8000008.8000008 XFG
+
+                       the following was designed with COLD acting as inverse asset to XFG, which will likely 
+                       be reserved for a purely inverse instrument, rather than the governance token for the 
+                       entire COLD L3 ecosystem & architecture.. so, it is still applicable,
+                       just not in the way we may have originally thought. :) 
+                       _________
+                       For initial onboarding wave, each time wXFG doubles or halves in price,
                        interest rates in COLD shall rise/fall by half.
                        
                        Such as:
